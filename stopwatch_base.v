@@ -1,7 +1,9 @@
 module counter(
     input clk, rst,
-    output [5:0] second_counter
-    output [5:0] minutes_counter
+    output [5:0] seconds_ones_counter;
+    output [3:0] seconds_tens_counter;
+    output [3:0] minutes_ones_counter;
+    output [3:0] minutes_tens_counter;
 );
     reg [31:0] counter_reg, counter_next;
     wire seconds_indicator;
