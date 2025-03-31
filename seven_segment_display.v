@@ -4,7 +4,7 @@ module seven_segment_display(
     input [3:0] seconds_tens_counter,
     input [3:0] minutes_ones_counter,
     input [3:0] minutes_tens_counter,
-    output [7:0] one_hot_out, display_pattern_out
+    output [7:0] one_hot_out, display_pattern
 );
     reg [31:0] ctr_reg, ctr_next;
     reg [7:0] one_hot_reg, one_hot_next;
@@ -28,7 +28,7 @@ module seven_segment_display(
                 8'b1111_1110 : one_hot_next = 8'b1111_1101;
                 8'b1111_1101 : one_hot_next = 8'b1111_1011;
                 8'b1111_1011 : one_hot_next = 8'b1111_0111;    
-                8'h1111_0111 : one_hot_next = 8'h1111_1110;
+                8'b1111_0111 : one_hot_next = 8'b1111_1110;
                 default : one_hot_next = one_hot_reg;
             endcase
         end
@@ -40,6 +40,7 @@ module seven_segment_display(
             default : display_val = seconds_ones_counter;
         endcase
     end
+    
     always @(*) begin
         case (display_val)
             4'b0000 : display_pattern_reg[6:0] = 7'b1000000;
@@ -54,9 +55,9 @@ module seven_segment_display(
             4'b1001 : display_pattern_reg[6:0] = 7'b0010000;
             default : display_pattern_reg[6:0] = 7'b1000000;
         endcase
-        display_pattern_reg[7] = (one_hot_reg == 8'h08);
+        display_pattern_reg[7] = (one_hot_reg != 8'b1111_1011);
     end
     assign one_hot_out = one_hot_reg;
-    assign display_pattern_out = display_pattern_reg;
+    assign display_pattern = display_pattern_reg;
 endmodule
 
